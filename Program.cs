@@ -43,3 +43,5 @@ using (var scope = app.Services.CreateScope())
 // Маршрутизация Blazor
 app.MapRazorComponents<LibraryWebSystem.Components.App>()
     .AddInteractiveServerRenderMode();
+    
+app.Run(); 
