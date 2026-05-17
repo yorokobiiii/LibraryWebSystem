@@ -4,78 +4,118 @@
 @rendermode InteractiveServer
 @inject ISearchService SearchService
 
-<h3>🔍 Гибкий поиск книг</h3>
+<div class="container mt-4">
+    <!-- Заголовок и кнопка добавления -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🔍 Гибкий поиск книг</h2>
+        <!-- Кнопка перехода на страницу добавления книги -->
+        <a href="/addbook" class="btn btn-success">➕ Добавить книгу</a>
+    </div>
 
-<form @onsubmit="PerformSearch">
-    <div class="mb-2">
-        <label>Название:</label>
-        <input @bind="title" class="form-control" placeholder="Например: Мастер" />
-    </div>
-    <div class="mb-2">
-        <label>Автор:</label>
-        <input @bind="author" class="form-control" placeholder="Например: Булгаков" />
-    </div>
-    <div class="row mb-2">
-        <div class="col">
-            <label>Год от:</label>
-            <input @bind="yearFrom" type="number" class="form-control" />
-        </div>
-        <div class="col">
-            <label>Год до:</label>
-            <input @bind="yearTo" type="number" class="form-control" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>Формат:</label>
-        <select @bind="format" class="form-select">
-            <option value="">Все форматы</option>
-            <option value="PDF">PDF</option>
-            <option value="EPUB">EPUB</option>
-            <option value="FB2">FB2</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Найти</button>
-</form>
+    <!-- Карточка с формой поиска -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form @onsubmit="PerformSearch">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Название книги:</label>
+                        <input @bind="title" class="form-control" placeholder="Например: Мастер" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Автор:</label>
+                        <input @bind="author" class="form-control" placeholder="Например: Булгаков" />
+                    </div>
+                </div>
 
-@if (isSearched)
-{
-    @if (results != null && results.Any())
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Год от:</label>
+                        <input @bind="yearFrom" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Год до:</label>
+                        <input @bind="yearTo" type="number" class="form-control" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Формат:</label>
+                        <select @bind="format" class="form-select">
+                            <option value="">Все форматы</option>
+                            <option value="PDF">PDF</option>
+                            <option value="EPUB">EPUB</option>
+                            <option value="FB2">FB2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary w-100">Найти</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Блок результатов поиска -->
+    @if (isSearched)
     {
-        <table class="table table-striped mt-3">
-            <thead>
-                <tr><th>ID</th><th>Название</th><th>Год</th><th>Цена (₽)</th><th>Формат</th></tr>
-            </thead>
-            <tbody>
-                @foreach (var book in results)
+        <div class="card shadow-sm">
+            <div class="card-body">
+                @if (results != null && results.Any())
                 {
-                    <tr>
-                        <td>@book.BookId</td>
-                        <td>@book.Title</td>
-                        <td>@book.YearPublished</td>
-                        <td>@book.Price</td>
-                        <td>@book.FileFormat</td>
-                    </tr>
+                    <h5 class="mb-3">Результаты поиска (найдено: @results.Count)</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Название</th>
+                                    <th>Год</th>
+                                    <th>Цена</th>
+                                    <th>Формат</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var book in results)
+                                {
+                                    <tr>
+                                        <td>@book.BookId</td>
+                                        <td>@book.Title</td>
+                                        <td>@book.YearPublished</td>
+                                        <td>@book.Price ₽</td>
+                                        <td><span class="badge bg-info text-dark">@book.FileFormat</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 }
-            </tbody>
-        </table>
+                else
+                {
+                    <div class="alert alert-warning" role="alert">
+                        Книги по заданным параметрам не найдены.
+                    </div>
+                }
+            </div>
+        </div>
     }
-    else
-    {
-        <p class="mt-3 text-muted">Книги не найдены.</p>
-    }
-}
+</div>
 
 @code {
+    // Переменные для хранения данных из полей ввода
     private string? title, author, format;
     private int? yearFrom, yearTo;
+
+    // Переменные для результатов поиска и состояния
     private List<Book>? results;
     private bool isSearched = false;
 
+    // Метод, который вызывается при нажатии кнопки "Найти"
     private async Task PerformSearch()
     {
-        Console.WriteLine($"Поиск: title={title}, author={author}");
+        // Обращаемся к сервису поиска
         results = await SearchService.SearchAsync(title, author, yearFrom, yearTo, format);
+        // Устанавливаем флаг, что поиск был выполнен (чтобы показать результаты)
         isSearched = true;
-        Console.WriteLine($"Найдено книг: {results?.Count}");
     }
 }

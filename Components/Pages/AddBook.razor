@@ -1,0 +1,100 @@
+@page "/addbook"
+@using LibraryWebSystem.Models
+@using LibraryWebSystem.Data
+@using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
+@inject LibraryContext Db
+
+<h3 class="mb-4">📚 Добавить новую книгу</h3>
+
+<EditForm Model="@book" OnValidSubmit="SaveBook">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="alert alert-danger" />
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Название книги: *</label>
+        <InputText @bind-Value="book.Title" class="form-control" placeholder="Например: Война и мир" />
+        <ValidationMessage For="@(() => book.Title)" class="text-danger" />
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">ISBN:</label>
+            <InputText @bind-Value="book.ISBN" class="form-control" placeholder="978-5-..." />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label fw-bold">Год издания:</label>
+            <InputNumber @bind-Value="book.YearPublished" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label fw-bold">Цена (₽):</label>
+            <InputNumber @bind-Value="book.Price" class="form-control" step="0.01" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label fw-bold">Формат файла:</label>
+            <InputSelect @bind-Value="book.FileFormat" class="form-select">
+                <option value="PDF">PDF</option>
+                <option value="EPUB">EPUB</option>
+                <option value="FB2">FB2</option>
+            </InputSelect>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Имя автора (для связи):</label>
+        <InputText @bind-Value="authorName" class="form-control" placeholder="Например: Лев Толстой" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">💾 Сохранить в базу</button>
+    <a href="/search" class="btn btn-secondary ms-2">↩️ Назад</a>
+</EditForm>
+
+@if (showSuccess)
+{
+    <div class="alert alert-success mt-3">✅ Книга "@book.Title" успешно добавлена!</div>
+}
+
+@code {
+    private Book book = new();
+    private string? authorName;
+    private bool showSuccess = false;
+
+    private async Task SaveBook()
+    {
+        showSuccess = false;
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(authorName))
+            {
+                var names = authorName.Split(' ', 2);
+                var firstName = names.Length > 0 ? names[0] : "";
+                var lastName = names.Length > 1 ? names[1] : "";
+
+                var author = await Db.Authors.FirstOrDefaultAsync(a => a.FirstName == firstName && a.LastName == lastName);
+
+                if (author == null)
+                {
+                    author = new Author { FirstName = firstName, LastName = lastName };
+                    Db.Authors.Add(author);
+                    await Db.SaveChangesAsync();
+                }
+
+                Db.BookAuthors.Add(new BookAuthor { Book = book, Author = author, Role = "Автор" });
+            }
+
+            Db.Books.Add(book);
+            await Db.SaveChangesAsync();
+
+            showSuccess = true;
+            book = new Book();
+            authorName = null;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка: {ex.Message}");
+        }
+    }
+}

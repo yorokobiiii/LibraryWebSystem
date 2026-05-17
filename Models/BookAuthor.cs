@@ -9,6 +9,9 @@ public class BookAuthor
     public int BookId { get; set; }
     public int AuthorId { get; set; }
 
+    [StringLength(50)]
+    public string Role { get; set; } = "Автор";
+
     public  Book Book { get; set; } = null!;
     public  Author Author { get; set; } = null!;
 }
