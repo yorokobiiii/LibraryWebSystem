@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  library-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: librarywebsystem
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Data Source=/app/Data/library.db
+    volumes:
+      - library-data:/app/Data
+    restart: unless-stopped
+
+volumes:
+  library-data:
+    driver: local
