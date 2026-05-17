@@ -1,0 +1,79 @@
+@page "/search"
+@rendermode InteractiveServer
+@using LibraryWebSystem.Services
+@using LibraryWebSystem.Models
+@inject ISearchService SearchService
+
+<h3 class="mb-4">🔍 Гибкий поиск книг</h3>
+
+<form @onsubmit="PerformSearch">
+    <div class="mb-2">
+        <label class="form-label">Название:</label>
+        <input @bind="title" class="form-control" placeholder="Например: Мастер" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label">Автор:</label>
+        <input @bind="author" class="form-control" placeholder="Например: Булгаков" />
+    </div>
+    <div class="row mb-2">
+        <div class="col">
+            <label class="form-label">Год от:</label>
+            <input @bind="yearFrom" type="number" class="form-control" />
+        </div>
+        <div class="col">
+            <label class="form-label">Год до:</label>
+            <input @bind="yearTo" type="number" class="form-control" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Формат:</label>
+        <select @bind="format" class="form-select">
+            <option value="">Все форматы</option>
+            <option value="PDF">PDF</option>
+            <option value="EPUB">EPUB</option>
+            <option value="FB2">FB2</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Найти</button>
+</form>
+
+<hr />
+
+@if (isSearched)
+{
+    @if (results != null && results.Any())
+    {
+        <table class="table table-striped mt-3">
+            <thead><tr><th>ID</th><th>Название</th><th>Год</th><th>Цена (₽)</th><th>Формат</th></tr></thead>
+            <tbody>
+                @foreach (var book in results)
+                {
+                    <tr>
+                        <td>@book.BookId</td>
+                        <td>@book.Title</td>
+                        <td>@book.YearPublished</td>
+                        <td>@book.Price</td>
+                        <td>@book.FileFormat</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="mt-3 text-muted">Книги по заданным параметрам не найдены.</p>
+    }
+}
+
+@code {
+    private string? title, author, format;
+    private int? yearFrom, yearTo;
+    private List<Book>? results;
+    private bool isSearched = false;
+
+    private async Task PerformSearch()
+    {
+        results = await SearchService.SearchAsync(title, author, yearFrom, yearTo, format);
+        isSearched = true;
+    }
+}
