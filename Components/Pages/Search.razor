@@ -1,32 +1,32 @@
 @page "/search"
-@rendermode InteractiveServer
 @using LibraryWebSystem.Services
 @using LibraryWebSystem.Models
+@rendermode InteractiveServer
 @inject ISearchService SearchService
 
-<h3 class="mb-4">🔍 Гибкий поиск книг</h3>
+<h3>🔍 Гибкий поиск книг</h3>
 
 <form @onsubmit="PerformSearch">
     <div class="mb-2">
-        <label class="form-label">Название:</label>
+        <label>Название:</label>
         <input @bind="title" class="form-control" placeholder="Например: Мастер" />
     </div>
     <div class="mb-2">
-        <label class="form-label">Автор:</label>
+        <label>Автор:</label>
         <input @bind="author" class="form-control" placeholder="Например: Булгаков" />
     </div>
     <div class="row mb-2">
         <div class="col">
-            <label class="form-label">Год от:</label>
+            <label>Год от:</label>
             <input @bind="yearFrom" type="number" class="form-control" />
         </div>
         <div class="col">
-            <label class="form-label">Год до:</label>
+            <label>Год до:</label>
             <input @bind="yearTo" type="number" class="form-control" />
         </div>
     </div>
     <div class="mb-3">
-        <label class="form-label">Формат:</label>
+        <label>Формат:</label>
         <select @bind="format" class="form-select">
             <option value="">Все форматы</option>
             <option value="PDF">PDF</option>
@@ -37,14 +37,14 @@
     <button type="submit" class="btn btn-primary">Найти</button>
 </form>
 
-<hr />
-
 @if (isSearched)
 {
     @if (results != null && results.Any())
     {
         <table class="table table-striped mt-3">
-            <thead><tr><th>ID</th><th>Название</th><th>Год</th><th>Цена (₽)</th><th>Формат</th></tr></thead>
+            <thead>
+                <tr><th>ID</th><th>Название</th><th>Год</th><th>Цена (₽)</th><th>Формат</th></tr>
+            </thead>
             <tbody>
                 @foreach (var book in results)
                 {
@@ -61,7 +61,7 @@
     }
     else
     {
-        <p class="mt-3 text-muted">Книги по заданным параметрам не найдены.</p>
+        <p class="mt-3 text-muted">Книги не найдены.</p>
     }
 }
 
@@ -73,7 +73,9 @@
 
     private async Task PerformSearch()
     {
+        Console.WriteLine($"Поиск: title={title}, author={author}");
         results = await SearchService.SearchAsync(title, author, yearFrom, yearTo, format);
         isSearched = true;
+        Console.WriteLine($"Найдено книг: {results?.Count}");
     }
 }
