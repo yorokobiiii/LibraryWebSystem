@@ -1,6 +1,6 @@
 using LibraryWebSystem.Models;
-using Microsoft.EntityFrameworkCore;
 using LibraryWebSystem.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryWebSystem.Services;
 
@@ -12,34 +12,38 @@ public class SearchService : ISearchService
 
     public async Task<List<Book>> SearchAsync(string? title, string? author, int? yearFrom, int? yearTo, string? format)
     {
-
-        var query = _context.Books
+        // 1. Сначала загружаем ВСЕ книги с авторами из базы
+        var allBooks = await _context.Books
             .Include(b => b.BookAuthors)
             .ThenInclude(ba => ba.Author)
-            .AsQueryable();
+            .ToListAsync();
 
-        // 1. Поиск по названию (частичное совпадение)
-        if (!string.IsNullOrWhiteSpace(title))
-            query = query.Where(b => b.Title.Contains(title));
+        // 2. Фильтруем уже в памяти (C# игнорирует регистр через StringComparison)
+        var results = allBooks.Where(b =>
+        {
+            // Фильтр по названию (регистронезависимый)
+            bool titleMatch = string.IsNullOrWhiteSpace(title) || 
+                b.Title.Contains(title, StringComparison.OrdinalIgnoreCase);
 
-        // 2. Поиск по автору (ищем в Имени или Фамилии)
-        if (!string.IsNullOrWhiteSpace(author))
-            query = query.Where(b => b.BookAuthors.Any(ba => 
-                ba.Author.FirstName.Contains(author) || 
-                ba.Author.LastName.Contains(author)));
+            // Фильтр по автору (регистронезависимый)
+            bool authorMatch = string.IsNullOrWhiteSpace(author) ||
+                b.BookAuthors.Any(ba => 
+                    ba.Author.FirstName.Contains(author, StringComparison.OrdinalIgnoreCase) ||
+                    ba.Author.LastName.Contains(author, StringComparison.OrdinalIgnoreCase));
 
-        // 3. Фильтр по году "от"
-        if (yearFrom.HasValue)
-            query = query.Where(b => b.YearPublished >= yearFrom.Value);
+            // Фильтр по году "от"
+            bool yearFromMatch = !yearFrom.HasValue || b.YearPublished >= yearFrom.Value;
 
-        // 4. Фильтр по году "до"
-        if (yearTo.HasValue)
-            query = query.Where(b => b.YearPublished <= yearTo.Value);
+            // Фильтр по году "до"
+            bool yearToMatch = !yearTo.HasValue || b.YearPublished <= yearTo.Value;
 
-        // 5. Фильтр по формату
-        if (!string.IsNullOrWhiteSpace(format))
-            query = query.Where(b => b.FileFormat == format);
+            // Фильтр по формату (регистронезависимый)
+            bool formatMatch = string.IsNullOrWhiteSpace(format) ||
+                b.FileFormat.Equals(format, StringComparison.OrdinalIgnoreCase);
 
-        return await query.ToListAsync();
+            return titleMatch && authorMatch && yearFromMatch && yearToMatch && formatMatch;
+        }).ToList();
+
+        return results;
     }
 }
