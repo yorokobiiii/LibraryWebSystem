@@ -122,7 +122,6 @@ C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\obj\Debug\net10
 C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\obj\Debug\net10.0\scopedcss\Components\Layout\ReconnectModal.razor.rz.scp.css
 C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\obj\Debug\net10.0\scopedcss\bundle\LibraryWebSystem.styles.css
 C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\obj\Debug\net10.0\scopedcss\projectbundle\LibraryWebSystem.bundle.scp.css
-C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\obj\Debug\net10.0\compressed\xpc2h5wfe2-{0}-khy4lop6wu-khy4lop6wu.gz
 C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\obj\Debug\net10.0\compressed\8m7gvxij40-{0}-bqjiyaj88i-bqjiyaj88i.gz
 C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\obj\Debug\net10.0\compressed\z3nfj7atth-{0}-c2jlpeoesf-c2jlpeoesf.gz
 C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\obj\Debug\net10.0\compressed\malt4i97rg-{0}-erw9l3u2r3-erw9l3u2r3.gz
@@ -201,3 +200,4 @@ C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\bin\Debug\net10
 C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\bin\Debug\net10.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\bin\Debug\net10.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+C:\Users\kosol\OneDrive\Рабочий стол\LibraryWebSystem\obj\Debug\net10.0\compressed\xpc2h5wfe2-{0}-oxyc43o9so-oxyc43o9so.gz

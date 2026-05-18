@@ -18,6 +18,10 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 var app = builder.Build();
 
 // ===== 4. MIDDLEWARE =====
+
+// Раздача статических файлов (CSS, JS, картинки)
+app.UseStaticFiles();
+
 // Anti-forgery (обязательно для Blazor форм)
 app.UseAntiforgery();
 

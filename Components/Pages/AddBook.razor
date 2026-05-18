@@ -5,57 +5,60 @@
 @rendermode InteractiveServer
 @inject LibraryContext Db
 
-<h3 class="mb-4">📚 Добавить новую книгу</h3>
+<h2 style="color: var(--lavender-accent); margin-bottom: 1.5rem;">➕ Добавить новую книгу</h2>
 
-<EditForm Model="@book" OnValidSubmit="SaveBook">
-    <DataAnnotationsValidator />
-    <ValidationSummary class="alert alert-danger" />
+<div class="card" style="max-width: 700px; margin: 0 auto;">
+    <EditForm Model="@book" OnValidSubmit="SaveBook">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="alert alert-warning" />
 
-    <div class="mb-3">
-        <label class="form-label fw-bold">Название книги: *</label>
-        <InputText @bind-Value="book.Title" class="form-control" placeholder="Например: Война и мир" />
-        <ValidationMessage For="@(() => book.Title)" class="text-danger" />
-    </div>
+        <label class="form-label">Название книги *</label>
+        <InputText @bind-Value="book.Title" class="form-control" placeholder="Введите название" />
+        <ValidationMessage For="@(() => book.Title)" style="color: #dc2626; font-size: 0.9rem;" />
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label class="form-label">ISBN:</label>
-            <InputText @bind-Value="book.ISBN" class="form-control" placeholder="978-5-..." />
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+            <div>
+                <label class="form-label">ISBN</label>
+                <InputText @bind-Value="book.ISBN" class="form-control" placeholder="978-5-..." />
+            </div>
+            <div>
+                <label class="form-label">Год издания</label>
+                <InputNumber @bind-Value="book.YearPublished" class="form-control" />
+            </div>
         </div>
-        <div class="col-md-6">
-            <label class="form-label fw-bold">Год издания:</label>
-            <InputNumber @bind-Value="book.YearPublished" class="form-control" />
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+            <div>
+                <label class="form-label">Цена (₽)</label>
+                <InputNumber @bind-Value="book.Price" class="form-control" step="0.01" />
+            </div>
+            <div>
+                <label class="form-label">Формат файла</label>
+                <InputSelect @bind-Value="book.FileFormat" class="form-select">
+                    <option value="PDF">PDF</option>
+                    <option value="EPUB">EPUB</option>
+                    <option value="FB2">FB2</option>
+                </InputSelect>
+            </div>
         </div>
-    </div>
 
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label class="form-label fw-bold">Цена (₽):</label>
-            <InputNumber @bind-Value="book.Price" class="form-control" step="0.01" />
+        <div style="margin-top: 1rem;">
+            <label class="form-label">Имя автора (для связи)</label>
+            <InputText @bind-Value="authorName" class="form-control" placeholder="Например: Лев Толстой" />
+            <small style="color: var(--text-muted);">Если автор уже есть в базе, книга свяжется с ним автоматически.</small>
         </div>
-        <div class="col-md-6">
-            <label class="form-label fw-bold">Формат файла:</label>
-            <InputSelect @bind-Value="book.FileFormat" class="form-select">
-                <option value="PDF">PDF</option>
-                <option value="EPUB">EPUB</option>
-                <option value="FB2">FB2</option>
-            </InputSelect>
+
+        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+            <button type="submit" class="btn-primary">💾 Сохранить</button>
+            <a href="/search" class="btn-secondary">↩️ Назад</a>
         </div>
-    </div>
+    </EditForm>
 
-    <div class="mb-3">
-        <label class="form-label">Имя автора (для связи):</label>
-        <InputText @bind-Value="authorName" class="form-control" placeholder="Например: Лев Толстой" />
-    </div>
-
-    <button type="submit" class="btn btn-primary">💾 Сохранить в базу</button>
-    <a href="/search" class="btn btn-secondary ms-2">↩️ Назад</a>
-</EditForm>
-
-@if (showSuccess)
-{
-    <div class="alert alert-success mt-3">✅ Книга "@book.Title" успешно добавлена!</div>
-}
+    @if (showSuccess)
+    {
+        <div class="alert alert-success">✅ Книга "@book.Title" успешно добавлена!</div>
+    }
+</div>
 
 @code {
     private Book book = new();

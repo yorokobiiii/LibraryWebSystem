@@ -1,13 +1,28 @@
 ﻿@page "/"
 
-<h3> LibraryWebSystem</h3>
+<div class="hero">
+    <h1>📖 Библиотека Online</h1>
+    <p>Удобный поиск, добавление и управление каталогом книг</p>
+    <a href="/search" class="btn-primary">Перейти к поиску</a>
+</div>
 
-<h4>Доступные разделы:</h4>
-<ul>
-    <li><a href="/search">🔍 Гибкий поиск книг</a></li>
-    <li><a href="/api/books">📖 API: Список книг</a></li>
-    <li><a href="/api/config">⚙️ API: Конфигурация</a></li>
-</ul>
-
-<h4>Технологии:</h4>
-<p>ASP.NET Core 10 + EF Core + Blazor Server + Docker</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔍</div>
+        <h3 style="color: var(--lavender-accent); margin-bottom: 0.5rem;">Гибкий поиск</h3>
+        <p style="color: var(--text-muted);">Поиск по названию, автору, году и формату</p>
+        <a href="/search" class="btn-secondary">Открыть</a>
+    </div>
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">➕</div>
+        <h3 style="color: var(--lavender-accent); margin-bottom: 0.5rem;">Добавить книгу</h3>
+        <p style="color: var(--text-muted);">Расширение каталога новыми изданиями</p>
+        <a href="/addbook" class="btn-secondary">Открыть</a>
+    </div>
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">⚙️</div>
+        <h3 style="color: var(--lavender-accent); margin-bottom: 0.5rem;">API & Технологии</h3>
+        <p style="color: var(--text-muted);">ASP.NET Core 10 + EF Core + Blazor Server</p>
+        <a href="/api/books" target="_blank" class="btn-secondary">API Docs</a>
+    </div>
+</div>
