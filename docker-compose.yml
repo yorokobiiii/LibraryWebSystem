@@ -1,19 +1,16 @@
-version: '3.8'
 services:
-  library-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: librarywebsystem
+  library-web:
+    build: .
+    container_name: LibraryWebSystem
     ports:
-      - "8080:8080"
+      - "5027:8080"  
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Data Source=/app/Data/library.db
+      - ASPNETCORE_URLS=http://+:8080
     volumes:
-      - library-data:/app/Data
+      # Сохраняем базу данных, чтобы она не терялась при перезапуске
+      - library-db-data:/app/Data
     restart: unless-stopped
 
 volumes:
-  library-data:
-    driver: local
+  library-db-data:
