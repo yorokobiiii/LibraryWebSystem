@@ -6,23 +6,19 @@
     <a href="/search" class="btn-primary">Перейти к поиску</a>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-    <div class="card" style="text-align: center;">
-        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔍</div>
-        <h3 style="color: var(--lavender-accent); margin-bottom: 0.5rem;">Гибкий поиск</h3>
-        <p style="color: var(--text-muted);">Поиск по названию, автору, году и формату</p>
-        <a href="/search" class="btn-secondary">Открыть</a>
-    </div>
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; max-width: 800px; margin: 0 auto;">
+
     <div class="card" style="text-align: center;">
         <div style="font-size: 2.5rem; margin-bottom: 1rem;">➕</div>
         <h3 style="color: var(--lavender-accent); margin-bottom: 0.5rem;">Добавить книгу</h3>
         <p style="color: var(--text-muted);">Расширение каталога новыми изданиями</p>
         <a href="/addbook" class="btn-secondary">Открыть</a>
     </div>
+    
     <div class="card" style="text-align: center;">
-        <div style="font-size: 2.5rem; margin-bottom: 1rem;">⚙️</div>
-        <h3 style="color: var(--lavender-accent); margin-bottom: 0.5rem;">API & Технологии</h3>
-        <p style="color: var(--text-muted);">ASP.NET Core 10 + EF Core + Blazor Server</p>
-        <a href="/api/books" target="_blank" class="btn-secondary">API Docs</a>
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">📚</div>
+        <h3 style="color: var(--lavender-accent); margin-bottom: 0.5rem;">Все книги</h3>
+        <p style="color: var(--text-muted);">Полный каталог доступных изданий</p>
+        <a href="/api/books" target="_blank" class="btn-secondary">Смотреть</a>
     </div>
 </div>
