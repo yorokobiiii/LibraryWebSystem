@@ -1,0 +1,85 @@
+@page "/books"
+@using LibraryWebSystem.Models
+@using LibraryWebSystem.Data
+@using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
+@inject LibraryContext Db
+
+<div style="margin-bottom: 2rem;">
+    <a href="/" class="btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+        ← На главную
+    </a>
+</div>
+
+<h2 style="color: var(--lavender-accent); margin-bottom: 1.5rem; text-align: center;">
+    📚 Все книги в каталоге
+</h2>
+
+@if (books != null && books.Any())
+{
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+        @foreach (var book in books)
+        {
+            var authors = string.Join(", ", book.BookAuthors.Select(ba => ba.Author.FirstName + " " + ba.Author.LastName));
+            
+            <div class="card" style="padding: 1.5rem;">
+                <h3 style="color: var(--lavender-accent); margin-bottom: 0.5rem; font-size: 1.2rem;">
+                    @book.Title
+                </h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.95rem;">
+                    <strong>Автор:</strong> @authors
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Год:</span>
+                        <span style="font-weight: 600;">@book.YearPublished</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Цена:</span>
+                        <span style="font-weight: 600; color: var(--lavender-accent);">@book.Price ₽</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Формат:</span>
+                        <span class="badge">@book.FileFormat</span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(book.ISBN))
+                    {
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-muted);">ISBN:</span>
+                            <span style="font-size: 0.85rem;">@book.ISBN</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem; padding: 1rem; background: var(--lavender-light); border-radius: 10px;">
+        <p style="margin: 0; color: var(--lavender-dark);">
+            <strong>Всего книг:</strong> @books.Count
+        </p>
+    </div>
+}
+else
+{
+    <div class="card" style="text-align: center; padding: 3rem;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+        <h3 style="color: var(--lavender-accent); margin-bottom: 0.5rem;">Каталог пуст</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+            В библиотеке пока нет книг. Добавьте первую книгу!
+        </p>
+        <a href="/addbook" class="btn-primary">Добавить книгу</a>
+    </div>
+}
+
+@code {
+    private List<Book>? books;
+
+    protected override async Task OnInitializedAsync()
+    {
+        books = await Db.Books
+            .Include(b => b.BookAuthors)
+            .ThenInclude(ba => ba.Author)
+            .ToListAsync();
+    }
+}
