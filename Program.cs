@@ -33,7 +33,7 @@ app.MapRazorComponents<LibraryWebSystem.Components.App>()
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<LibraryContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
     
     if (!db.Books.Any())
     {
