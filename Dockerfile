@@ -1,5 +1,5 @@
 # Этап 1: Сборка приложения
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /App
 
 # Копируем файл проекта и восстанавливаем зависимости
