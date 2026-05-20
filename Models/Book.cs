@@ -16,3 +16,4 @@ public class Book
     // Связь N:N
     public  ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
 }
+

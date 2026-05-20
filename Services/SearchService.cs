@@ -12,13 +12,13 @@ public class SearchService : ISearchService
 
     public async Task<List<Book>> SearchAsync(string? title, string? author, int? yearFrom, int? yearTo, string? format)
     {
-        // 1. Сначала загружаем ВСЕ книги с авторами из базы
+        // Загружаем все книги с авторами из базы
         var allBooks = await _context.Books
             .Include(b => b.BookAuthors)
             .ThenInclude(ba => ba.Author)
             .ToListAsync();
 
-        // 2. Фильтруем уже в памяти (C# игнорирует регистр через StringComparison)
+        // Фильтруем уже в памяти (C# игнорирует регистр через StringComparison)
         var results = allBooks.Where(b =>
         {
             // Фильтр по названию (регистронезависимый)
